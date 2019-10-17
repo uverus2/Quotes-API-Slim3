@@ -63,11 +63,13 @@ $app->post("/api/quote/add" , function ( Request $request, Response $response, a
 
 $app->put("/api/quote/update/{id}" , function ( Request $request, Response $response, array $args){
 
-    $data = file_get_contents("php://input");
+    
     $id = $args["id"];
-    $quote = $request->getParam("quote");
-    $author = $request->getParam("author");
-    $year = $request->getParam("year");
+    $put = json_decode($request->getBody()->getContents(), true);
+
+    $quote = $put["quote"];
+    $author = $put["author"];
+    $year = $put["year"];
 
     $stm = $this->db->prepare("UPDATE quotes SET quote=:quote, author=:author, year=:year WHERE ID=:id ");
         $stm->bindParam(":id", $id);
